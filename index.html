@@ -1,41 +1,109 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Calculador DMX DIP Switch</title>
-  <style>
-    body { font-family: Arial; text-align: center; background: #111; color: #fff; }
-    input { padding: 10px; font-size: 18px; }
-    .switches { margin-top: 20px; }
-    .switch { display: inline-block; margin: 5px; padding: 10px; border: 1px solid #555; }
-    .on { background: lime; color: black; }
-  </style>
+<meta charset="UTF-8">
+<title>DMX DIP Calculator PRO</title>
+
+<style>
+body {
+  background: #0a0a0a;
+  color: white;
+  font-family: Arial;
+  text-align: center;
+}
+
+h1 {
+  margin-top: 30px;
+}
+
+input {
+  padding: 10px;
+  font-size: 20px;
+  width: 120px;
+  text-align: center;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.container {
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.switch {
+  width: 50px;
+  height: 90px;
+  background: #222;
+  border-radius: 8px;
+  position: relative;
+  border: 2px solid #444;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  font-size: 12px;
+}
+
+.toggle {
+  width: 30px;
+  height: 40px;
+  background: #555;
+  border-radius: 4px;
+  margin-bottom: 5px;
+  transition: 0.2s;
+}
+
+.on .toggle {
+  transform: translateY(-40px);
+  background: lime;
+  box-shadow: 0 0 10px lime;
+}
+
+.label {
+  margin-bottom: 5px;
+}
+</style>
+
 </head>
 <body>
 
-<h1>Calculador DIP Switch DMX</h1>
+<h1>DMX DIP Calculator</h1>
 
-<input type="number" id="dmx" placeholder="Dirección DMX (1-512)" min="1" max="512">
+<input type="number" id="dmx" min="1" max="512" placeholder="1-512">
 <button onclick="calcular()">Calcular</button>
 
-<div class="switches" id="resultado"></div>
+<div class="container" id="switches"></div>
 
 <script>
+let pesos = [1,2,4,8,16,32,64,128,256];
+
 function calcular() {
   let valor = parseInt(document.getElementById("dmx").value);
-  let pesos = [1,2,4,8,16,32,64,128,256];
   let html = "";
 
-  for (let i = pesos.length - 1; i >= 0; i--) {
-    if (valor >= pesos[i]) {
-      valor -= pesos[i];
-      html += `<div class="switch on">SW ${i+1}<br>ON</div>`;
-    } else {
-      html += `<div class="switch">SW ${i+1}<br>OFF</div>`;
+  for (let i = 0; i < pesos.length; i++) {
+    let activo = false;
+
+    if (valor >= pesos[pesos.length - 1 - i]) {
+      valor -= pesos[pesos.length - 1 - i];
+      activo = true;
     }
+
+    html += `
+      <div class="switch ${activo ? 'on' : ''}">
+        <div class="toggle"></div>
+        <div class="label">SW ${9 - i}</div>
+      </div>
+    `;
   }
 
-  document.getElementById("resultado").innerHTML = html;
+  document.getElementById("switches").innerHTML = html;
 }
 </script>
 
