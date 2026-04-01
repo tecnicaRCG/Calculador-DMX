@@ -10,24 +10,26 @@ body {
   color: white;
   font-family: Arial;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
 }
 
 h1 {
-  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 /* INPUT */
 input {
-  padding: 10px;
-  font-size: 20px;
-  width: 120px;
+  padding: 12px;
+  font-size: 22px;
+  width: 140px;
   text-align: center;
-}
-
-button {
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
+  border-radius: 6px;
+  border: none;
+  outline: none;
 }
 
 /* PANEL DIP */
@@ -51,6 +53,7 @@ button {
 .container {
   display: flex;
   gap: 6px;
+  justify-content: center;
 }
 
 /* SWITCH */
@@ -65,6 +68,7 @@ button {
   justify-content: space-between;
   align-items: center;
   padding: 4px;
+  cursor: pointer;
 }
 
 /* PALANCA */
@@ -76,10 +80,9 @@ button {
   transition: 0.2s;
 }
 
-/* ON = arriba */
+/* ON */
 .on .toggle {
   transform: translateY(-20px);
-  background: white;
 }
 
 /* NUMERO */
@@ -108,7 +111,6 @@ button {
 <h1>Calculador DIP Switch DMX</h1>
 
 <input type="number" id="dmx" min="1" max="512" placeholder="1-512">
-<button onclick="calcular()">Calcular</button>
 
 <div class="dip-panel">
   <div class="on-label">ON ↑</div>
@@ -117,28 +119,50 @@ button {
 
 <script>
 let pesos = [1,2,4,8,16,32,64,128,256];
+let estados = new Array(9).fill(false);
 
-function calcular() {
+// INIT
+window.onload = () => render();
+
+// INPUT → SWITCHES
+document.getElementById("dmx").addEventListener("input", desdeInput);
+
+function desdeInput() {
   let valor = parseInt(document.getElementById("dmx").value);
+  estados = new Array(9).fill(false);
 
-  if (valor < 1 || valor > 512 || isNaN(valor)) return;
-
-  let estados = new Array(9).fill(false);
-
-  // 🔥 lógica correcta (de mayor a menor)
-  for (let i = pesos.length - 1; i >= 0; i--) {
-    if (valor >= pesos[i]) {
-      valor -= pesos[i];
-      estados[i] = true;
+  if (!isNaN(valor) && valor >= 1 && valor <= 512) {
+    for (let i = pesos.length - 1; i >= 0; i--) {
+      if (valor >= pesos[i]) {
+        valor -= pesos[i];
+        estados[i] = true;
+      }
     }
   }
 
+  render();
+}
+
+// SWITCHES → INPUT
+function toggleSwitch(index) {
+  estados[index] = !estados[index];
+
+  let total = 0;
+  for (let i = 0; i < pesos.length; i++) {
+    if (estados[i]) total += pesos[i];
+  }
+
+  document.getElementById("dmx").value = total;
+  render();
+}
+
+// RENDER
+function render() {
   let html = "";
 
-  // mostrar de SW1 a SW9
   for (let i = 0; i < pesos.length; i++) {
     html += `
-      <div class="switch ${estados[i] ? 'on' : ''}">
+      <div class="switch ${estados[i] ? 'on' : ''}" onclick="toggleSwitch(${i})">
         <div class="toggle"></div>
         <div class="number">${i + 1}</div>
       </div>
