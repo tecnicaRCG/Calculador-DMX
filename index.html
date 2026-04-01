@@ -102,7 +102,7 @@ input {
 }
 
 .switch:active {
-  transform: scale(0.95);
+  transform: scale(0.9);
 }
 
 /* TOGGLE */
@@ -170,6 +170,7 @@ input {
     <div class="container" id="switches"></div>
   </div>
   </div>
+  <audio id="clickSound" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
   <script>
 let pesos = [1,2,4,8,16,32,64,128,256];
 let estados = new Array(9).fill(false);
@@ -199,10 +200,9 @@ function desdeInput() {
 // SWITCHES → INPUT
 function toggleSwitch(index) {
 
-  // 🔥 VIBRACIÓN (si el dispositivo lo soporta)
-  if (navigator.vibrate) {
-    navigator.vibrate(30);
-  }
+  let sound = document.getElementById("clickSound");
+  sound.currentTime = 0;
+  sound.play();
 
   estados[index] = !estados[index];
 
