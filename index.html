@@ -198,6 +198,12 @@ function desdeInput() {
 
 // SWITCHES → INPUT
 function toggleSwitch(index) {
+
+  // 🔥 VIBRACIÓN (si el dispositivo lo soporta)
+  if (navigator.vibrate) {
+    navigator.vibrate(30);
+  }
+
   estados[index] = !estados[index];
 
   let total = 0;
