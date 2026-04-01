@@ -15,7 +15,7 @@ body {
   height: 100vh;
 }
 
-
+/* TOP BAR */
 .top-bar {
   padding: 10px;
   background: #111;
@@ -44,7 +44,7 @@ input {
   align-items: center;
 }
 
-
+/* HEADER LOGO */
 .header {
   display: flex;
   flex-direction: column;
@@ -159,10 +159,12 @@ input {
   <input type="number" id="dmx" min="1" max="512" placeholder="1-512">
 </div>
 <div class="main">
+  <!-- LOGO -->
   <div class="header">
     <img src="logoRCG.png" alt="RCG Logo" class="logo">
     <div class="title">DIP Switch Calculator</div>
   </div>
+  <!-- PANEL -->
   <div class="dip-panel">
     <div class="on-label">ON ↑</div>
     <div class="container" id="switches"></div>
